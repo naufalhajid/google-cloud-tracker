@@ -1161,6 +1161,26 @@
             updateDashboard();
             showTab('dashboard');
         }
+
+        // Script untuk resize iframe di Streamlit
+        function resizeIframe() {
+            const body = document.body,
+                  html = document.documentElement;
+            const height = Math.max( body.scrollHeight, body.offsetHeight, 
+                                     html.clientHeight, html.scrollHeight, html.offsetHeight );
+            
+            window.parent.postMessage({
+                height: height,
+                type: 'streamlit-component-resize'
+            }, '*');
+        }
+        
+        window.addEventListener('load', resizeIframe);
+        window.addEventListener('resize', resizeIframe);
+        document.addEventListener('DOMContentLoaded', resizeIframe);
+        
+        const observer = new MutationObserver(resizeIframe);
+        observer.observe(document.body, { childList: true, subtree: true });
         
     </script>
 </body>
